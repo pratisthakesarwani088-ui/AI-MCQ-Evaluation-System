@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Previous Exams - AI Assistant for MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">Previous Exams</h1>
+    <p class="page-subtitle">Browse past exams, and open one to view its evaluated students.</p>
+
+    <!-- ============ All Exams ============ -->
+    <div class="card">
+      <h2>All Exams</h2>
+
+      <div class="grid" style="grid-template-columns: 2fr 1fr 1fr 1fr;">
+        <div>
+          <label for="exam-search">Search by Exam Name</label>
+          <input type="text" id="exam-search" placeholder="e.g. Unit Test 1">
+        </div>
+        <div>
+          <label for="exam-subject-filter">Subject</label>
+          <select id="exam-subject-filter">
+            <option value="">All Subjects</option>
+          </select>
+        </div>
+        <div>
+          <label for="exam-type-filter">Exam Type</label>
+          <select id="exam-type-filter">
+            <option value="">All Types</option>
+            <option value="AI">AI-Based</option>
+            <option value="OMR">OMR</option>
+          </select>
+        </div>
+        <div>
+          <label for="exam-sort">Sort By</label>
+          <select id="exam-sort">
+            <option value="newest">Newest First</option>
+            <option value="oldest">Oldest First</option>
+            <option value="name">Exam Name</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="exams-loading" class="empty-state"><span class="spinner"></span> Loading exams...</div>
+
+      <table id="exams-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Exam Name</th>
+            <th>Subject</th>
+            <th>Type</th>
+            <th>Total Questions</th>
+            <th>Students Evaluated</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="exams-tbody"></tbody>
+      </table>
+      <div id="exams-empty" class="empty-state" style="display:none;">No exams match your search/filters.</div>
+      <div id="exams-error" class="alert alert-error"></div>
+    </div>
+
+    <!-- ============ Exam Details (shown when an exam is opened) ============ -->
+    <div class="card" id="exam-details-card" style="display:none;">
+      <h2>Exam Details</h2>
+      <div class="grid">
+        <div>
+          <h3 style="margin-bottom:2px;">Exam Name</h3>
+          <p id="d-exam-name" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Subject</h3>
+          <p id="d-subject" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Exam Type</h3>
+          <p id="d-exam-type" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Total Questions</h3>
+          <p id="d-total-questions" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Marks per Question</h3>
+          <p id="d-marks-per-question" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Negative Marks</h3>
+          <p id="d-negative-marks" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Students Evaluated</h3>
+          <p id="d-evaluated-count" style="margin:0;color:#6b7280;"></p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;">Created</h3>
+          <p id="d-created-at" style="margin:0;color:#6b7280;"></p>
+        </div>
+      </div>
+      <button type="button" class="btn btn-secondary" id="delete-exam-btn" style="background:#fdecec;color:#d33d3d;">Delete This Exam</button>
+    </div>
+
+    <!-- ============ Student List (shown when an exam is opened) ============ -->
+    <div class="card" id="student-list-card" style="display:none;">
+      <h2>Student List</h2>
+      <p style="color:#6b7280;margin-top:-8px;">Everyone who has been evaluated for this exam.</p>
+
+      <div id="students-loading" class="empty-state" style="display:none;"><span class="spinner"></span> Loading students...</div>
+
+      <table id="students-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Roll Number</th>
+            <th>Final Marks</th>
+            <th>Percentage</th>
+            <th>Evaluation Date</th>
+            <th style="width:180px;"></th>
+          </tr>
+        </thead>
+        <tbody id="student-list-tbody"></tbody>
+      </table>
+      <div id="students-empty" class="empty-state" style="display:none;">No students have been evaluated for this exam yet.</div>
+      <div id="students-error" class="alert alert-error"></div>
+    </div>
+  </div>
+
+  <!-- ============ Delete Confirmation Modal ============ -->
+  <div id="delete-modal-overlay" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(20,25,40,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div class="card" style="max-width:420px; margin:20px;">
+      <h2 style="margin-top:0;">Delete Student Record?</h2>
+      <p id="delete-modal-text" style="color:#374151;"></p>
+      <p style="color:#d33d3d; font-size:0.85rem;">This permanently deletes the student's sheet, responses, and evaluation result, and cannot be undone.</p>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <button type="button" class="btn btn-secondary" id="delete-modal-cancel" style="margin-top:0;">Cancel</button>
+        <button type="button" class="btn" id="delete-modal-confirm" style="margin-top:0;background:#d33d3d;color:#fff;">Delete Permanently</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/previous_exams.js"></script>
+</body>
+</html>

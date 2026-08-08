@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Based Evaluation - AI Assistant for MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">AI-Based Evaluation</h1>
+    <p class="page-subtitle">Add your exam's questions, then let Gemini AI generate a complete answer key for you to review and verify.</p>
+
+    <div id="no-exam-warning" class="card" style="display:none;">
+      <p>⚠️ No exam selected, or the selected exam isn't configured for AI-Based Evaluation. Please <a href="/create-exam">create an AI-type exam</a> first.</p>
+    </div>
+
+    <!-- ============ STEP 1: Add Questions ============ -->
+    <div class="card">
+      <div class="step">Step 1</div>
+      <h2 style="margin-top:4px;">Add Questions</h2>
+
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <button type="button" class="btn btn-primary" id="tab-upload-btn" style="margin-top:0;">Upload Question Paper</button>
+        <button type="button" class="btn btn-secondary" id="tab-manual-btn" style="margin-top:0;">Manual Question Entry</button>
+      </div>
+
+      <!-- Upload Question Paper panel -->
+      <div id="upload-paper-panel">
+        <label for="question_paper_file">Question Paper (PDF, DOCX, or TXT)</label>
+        <input type="file" id="question_paper_file" name="file" accept=".pdf,.docx,.txt">
+        <small class="hint">Gemini will read this file and extract the individual questions and options.</small>
+        <button type="button" class="btn btn-primary" id="extract-questions-btn">Upload &amp; Extract Questions</button>
+      </div>
+
+      <!-- Manual Question Entry panel -->
+      <div id="manual-entry-panel" style="display:none;">
+        <label for="manual_question_text">Question Text</label>
+        <textarea id="manual_question_text" class="ai-textarea" placeholder="e.g. What is the powerhouse of the cell?"></textarea>
+
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-top:10px;">
+          <div>
+            <label for="manual_option_a">Option A</label>
+            <input type="text" id="manual_option_a" placeholder="Option A">
+          </div>
+          <div>
+            <label for="manual_option_b">Option B</label>
+            <input type="text" id="manual_option_b" placeholder="Option B">
+          </div>
+          <div>
+            <label for="manual_option_c">Option C</label>
+            <input type="text" id="manual_option_c" placeholder="Option C">
+          </div>
+          <div>
+            <label for="manual_option_d">Option D</label>
+            <input type="text" id="manual_option_d" placeholder="Option D">
+          </div>
+          <div>
+            <label for="manual_option_e">Option E <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+            <input type="text" id="manual_option_e" placeholder="Option E">
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="add-question-btn">Add Question</button>
+        <button type="button" class="btn btn-secondary" id="cancel-edit-btn" style="display:none;">Cancel Edit</button>
+      </div>
+
+      <div id="questions-alert" class="alert"></div>
+
+      <h3 style="margin-top:24px;">Questions Added</h3>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60px;">Q#</th>
+            <th>Question</th>
+            <th>Options</th>
+            <th style="width:80px;"></th>
+          </tr>
+        </thead>
+        <tbody id="questions-tbody">
+          <tr>
+            <td colspan="4" class="empty-state">No questions added yet. Upload a question paper or add questions manually above.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============ STEP 2: Generate Answer Key ============ -->
+    <div class="card">
+      <div class="step">Step 2</div>
+      <h2 style="margin-top:4px;">Generate Answer Key with AI</h2>
+      <p style="color:#6b7280;">Gemini will read every question above and suggest the correct option for each one.</p>
+
+      <label style="display:flex; align-items:center; gap:8px; font-weight:400; margin-top:10px;">
+        <input type="checkbox" id="include_explanations" style="width:auto;">
+        Also generate an explanation for each answer
+      </label>
+
+      <button type="button" class="btn btn-primary" id="generate-answer-key-btn">Generate Answer Key using Gemini AI</button>
+      <div id="generate-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ STEP 3: Verify & Edit Answer Key ============ -->
+    <div class="card">
+      <div class="step">Step 3</div>
+      <h2 style="margin-top:4px;">Verify &amp; Edit Answer Key</h2>
+      <p style="color:#6b7280;">Review what the AI suggested. Edit any answer or explanation before saving.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:60px;">Q#</th>
+            <th>Question</th>
+            <th style="width:110px;">AI Answer</th>
+            <th>Explanation</th>
+            <th style="width:90px;">Verified</th>
+          </tr>
+        </thead>
+        <tbody id="answer-key-tbody">
+          <tr>
+            <td colspan="5" class="empty-state">Generate an answer key above to review it here.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button type="button" class="btn btn-success" id="save-verified-key-btn">Save Verified Answer Key</button>
+      <div id="verify-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ STEP 4: Upload Student Answer Sheet ============ -->
+    <div class="card">
+      <div class="step">Step 4</div>
+      <h2 style="margin-top:4px;">Upload Student Answer Sheet</h2>
+      <p style="color:#6b7280;">Once the answer key above is fully verified, upload a student's answer sheet. OCR will automatically read and extract their answers.</p>
+
+      <div class="grid">
+        <div>
+          <label for="ai_student_name">Student Name <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+          <input type="text" id="ai_student_name" placeholder="e.g. Priya Sharma">
+        </div>
+        <div>
+          <label for="ai_roll_number">Roll Number <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+          <input type="text" id="ai_roll_number" placeholder="e.g. 21BCA045">
+        </div>
+      </div>
+
+      <label for="ai_student_sheet_file">Student Answer Sheet Image (JPG, JPEG, PNG)</label>
+      <input type="file" id="ai_student_sheet_file" accept=".jpg,.jpeg,.png">
+      <small class="hint">Works with handwritten answers like "1-B" as well as printed sheets with a circled/boxed/ticked option.</small>
+      <img id="ai-sheet-preview" style="display:none; max-width:100%; margin-top:14px; border-radius:8px; border:1px solid #e1e5ee;">
+
+      <button type="button" class="btn btn-primary" id="ai-upload-sheet-btn">Upload &amp; Extract Answers</button>
+      <div id="ai-sheet-alert" class="alert"></div>
+
+      <h3 style="margin-top:24px;">Uploaded Student Sheets</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Roll No.</th>
+            <th>Sheet Type</th>
+            <th>Uploaded</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="ai-sheets-tbody">
+          <tr>
+            <td colspan="5" class="empty-state">No student sheets uploaded yet for this exam.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/ai_evaluation.js"></script>
+</body>
+</html>

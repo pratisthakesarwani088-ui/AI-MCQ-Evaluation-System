@@ -1,0 +1,37 @@
+# ============================================================
+# AI Assistant for MCQ Evaluation System - Python Dependencies
+# Install with:  pip install -r requirements.txt
+# Tested with Python 3.9 - 3.12
+# ============================================================
+
+# --- Web framework ---
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+
+# --- Database ---
+SQLAlchemy==2.0.30
+PyMySQL==1.1.1
+cryptography==42.0.7
+
+# --- Image processing (OMR bubble detection, perspective/rotation correction) ---
+opencv-python==4.9.0.80
+numpy==1.26.4
+
+# --- OCR (answer key / student sheet / scanned question paper reading) ---
+paddlepaddle==3.0.0
+paddleocr==2.8.1
+
+# --- Document parsing (AI-Based Evaluation: question paper upload) ---
+pypdf==4.2.0
+python-docx==1.1.2
+
+# --- AI Assistant (Gemini) ---
+google-generativeai==0.8.6
+
+# --- PDF report generation ---
+reportlab==4.2.5
+
+# --- Config / validation ---
+pydantic==2.7.1
+python-dotenv==1.0.1

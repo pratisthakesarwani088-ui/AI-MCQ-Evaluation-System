@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - AI Assistant for MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+
+    <div class="hero">
+      <h1>AI Assistant for MCQ Evaluation System</h1>
+      <p>Evaluate Smarter with AI &mdash; create exams, generate or scan answer keys, and evaluate student sheets in minutes.</p>
+    </div>
+
+    <div class="grid">
+
+      <a href="/create-exam" class="dashboard-card">
+        <span class="icon">🗂️</span>
+        <div class="step">Get Started</div>
+        <h3>Create Exam</h3>
+        <p>Set up an exam's name, subject, question count, and marking scheme.</p>
+      </a>
+
+      <a href="/ai-evaluation" class="dashboard-card">
+        <span class="icon">✨</span>
+        <div class="step">AI-Powered</div>
+        <h3>AI-Based Evaluation</h3>
+        <p>Upload a question paper (or enter questions manually) and let Gemini AI generate the answer key.</p>
+      </a>
+
+      <a href="/omr-evaluation" class="dashboard-card">
+        <span class="icon">🔵</span>
+        <div class="step">Offline</div>
+        <h3>OMR Evaluation</h3>
+        <p>Upload a question paper, answer key, and student OMR sheet for automatic OpenCV bubble-sheet evaluation.</p>
+      </a>
+
+      <a href="/previous-exams" class="dashboard-card">
+        <span class="icon">📚</span>
+        <div class="step">History</div>
+        <h3>Previous Exams</h3>
+        <p>View past exams, their student lists, and generated reports.</p>
+      </a>
+
+      <a href="/reports" class="dashboard-card">
+        <span class="icon">📊</span>
+        <div class="step">Insights</div>
+        <h3>Reports</h3>
+        <p>Student and exam reports, highest/lowest/average marks, and PDF downloads.</p>
+      </a>
+
+      <a href="/ai-assistant" class="dashboard-card">
+        <span class="icon">🤖</span>
+        <div class="step">Assistant</div>
+        <h3>AI Assistant Panel</h3>
+        <p>Generate answer keys, explain answers, create new MCQs, analyze results, and find weak topics.</p>
+      </a>
+
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+      <h3>System Status</h3>
+      <p id="status-text">Checking connection to backend...</p>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script>
+    // Simple health check so the teacher can see at a glance that
+    // the FastAPI backend is up and reachable.
+    (async function checkStatus() {
+      const statusEl = document.getElementById("status-text");
+      try {
+        const res = await fetch("/api/ping");
+        const data = await res.json();
+        if (data.success) {
+          statusEl.textContent = "✅ Connected. Backend server is running normally.";
+          statusEl.style.color = "#1f9d55";
+        } else {
+          throw new Error("Bad response");
+        }
+      } catch (err) {
+        statusEl.textContent = "⚠️ Could not reach the backend server. Please make sure it is running.";
+        statusEl.style.color = "#d33d3d";
+      }
+    })();
+  </script>
+</body>
+</html>

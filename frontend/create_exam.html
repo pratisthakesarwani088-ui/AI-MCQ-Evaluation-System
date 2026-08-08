@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Exam - MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">Step 1: Create Exam</h1>
+    <p class="page-subtitle">Set up the exam name, number of questions, and marking scheme.</p>
+
+    <div class="card">
+      <h2>New Exam</h2>
+      <form id="create-exam-form">
+        <label for="exam_name">Exam Name</label>
+        <input type="text" id="exam_name" name="exam_name" placeholder="e.g. Unit Test 1 - Computer Science" required>
+
+        <label for="subject">Subject <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+        <input type="text" id="subject" name="subject" placeholder="e.g. Computer Science">
+
+        <label for="exam_type">Exam Type</label>
+        <select id="exam_type" name="exam_type" required>
+          <option value="">-- Select how this exam will be evaluated --</option>
+          <option value="AI">AI-Based Evaluation (Gemini generates the answer key)</option>
+          <option value="OMR">OMR Evaluation (OpenCV bubble-sheet detection)</option>
+        </select>
+        <small class="hint">AI-Based Evaluation needs internet access; OMR Evaluation works fully offline.</small>
+
+        <label for="total_questions">Total Questions</label>
+        <input type="number" id="total_questions" name="total_questions" min="1" max="500" placeholder="e.g. 50" required>
+
+        <label for="marks_per_correct">Marks per Question</label>
+        <input type="number" id="marks_per_correct" name="marks_per_correct" min="0.1" step="0.05" placeholder="e.g. 1" required>
+
+        <label for="negative_marks">Negative Marks (per wrong answer)</label>
+        <input type="number" id="negative_marks" name="negative_marks" min="0" step="0.05" placeholder="e.g. 0.25" value="0">
+        <small class="hint">Enter 0 if there is no negative marking. This value is deducted (not added) for each wrong answer.</small>
+
+        <button type="submit" class="btn btn-primary" id="submit-btn">Create Exam</button>
+      </form>
+
+      <div id="form-alert" class="alert"></div>
+    </div>
+
+    <div class="card">
+      <h2>Existing Exams</h2>
+      <div id="exams-list">
+        <p class="empty-state">Loading exams...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/create_exam.js"></script>
+</body>
+</html>

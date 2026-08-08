@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Assistant - AI Assistant for MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">AI Assistant</h1>
+    <p class="page-subtitle">Generate answer keys, explain answers, create new MCQs, and analyze student performance with Gemini AI.</p>
+
+    <div class="card">
+      <div class="ai-panel-layout">
+
+        <!-- Left: list of AI actions -->
+        <div class="ai-action-list" id="ai-action-list">
+          <button type="button" class="ai-action-btn active" data-action="generate-answer-key">
+            <span class="ai-icon">🗝️</span>
+            <span>
+              <span class="ai-label">Generate Answer Key</span>
+              <span class="ai-desc">Have Gemini generate a full answer key for an exam's questions.</span>
+            </span>
+          </button>
+
+          <button type="button" class="ai-action-btn" data-action="explain-answer">
+            <span class="ai-icon">💡</span>
+            <span>
+              <span class="ai-label">Explain Answers</span>
+              <span class="ai-desc">See why the correct option is right and others are wrong.</span>
+            </span>
+          </button>
+
+          <button type="button" class="ai-action-btn" data-action="generate-mcqs">
+            <span class="ai-icon">❓</span>
+            <span>
+              <span class="ai-label">Generate New MCQs</span>
+              <span class="ai-desc">Create new multiple-choice questions on a topic and difficulty.</span>
+            </span>
+          </button>
+
+          <button type="button" class="ai-action-btn" data-action="analyze-results">
+            <span class="ai-icon">📈</span>
+            <span>
+              <span class="ai-label">Analyze Student Results</span>
+              <span class="ai-desc">Get an AI summary of one student's performance.</span>
+            </span>
+          </button>
+
+          <button type="button" class="ai-action-btn" data-action="weak-topics">
+            <span class="ai-icon">🎯</span>
+            <span>
+              <span class="ai-label">Identify Weak Topics</span>
+              <span class="ai-desc">See which topics/questions this student struggled with most.</span>
+            </span>
+          </button>
+
+          <button type="button" class="ai-action-btn" data-action="strong-topics">
+            <span class="ai-icon">💪</span>
+            <span>
+              <span class="ai-label">Identify Strong Topics</span>
+              <span class="ai-desc">See which topics/questions this student answered well.</span>
+            </span>
+          </button>
+
+          <button type="button" class="ai-action-btn" data-action="suggestions">
+            <span class="ai-icon">💬</span>
+            <span>
+              <span class="ai-label">Study Suggestions</span>
+              <span class="ai-desc">Get personalized improvement suggestions for this student.</span>
+            </span>
+          </button>
+        </div>
+
+        <!-- Right: context panel for the selected action -->
+        <div id="ai-context-panel">
+          <!-- Filled in by ai_assistant.js based on the selected action -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/ai_assistant.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Result - MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    @media print {
+      .navbar, #print-btn { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">Step 5: Result</h1>
+    <p class="page-subtitle">Final MCQ evaluation for the selected student sheet.</p>
+
+    <div id="no-sheet-warning" class="card" style="display:none;">
+      <p>⚠️ No student sheet selected. Please go to <a href="/previous-exams">Previous Exams</a> to select an evaluated student, or upload one via the <a href="/ai-evaluation">AI-Based Evaluation</a> or <a href="/omr-evaluation">OMR Evaluation</a> page.</p>
+    </div>
+
+    <div id="loading-state" class="card">
+      <p class="empty-state"><span class="spinner"></span> Loading result...</p>
+    </div>
+
+    <div id="error-state" class="card" style="display:none;">
+      <p id="error-text" class="empty-state"></p>
+    </div>
+
+    <div id="result-content" style="display:none;">
+
+      <div class="card">
+        <div class="grid">
+          <div>
+            <h3 style="margin-bottom:4px;">Exam</h3>
+            <p id="r-exam-name" style="margin:0;color:#6b7280;"></p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:4px;">Student</h3>
+            <p id="r-student-name" style="margin:0;color:#6b7280;"></p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:4px;">Roll Number</h3>
+            <p id="r-roll-number" style="margin:0;color:#6b7280;"></p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:4px;">Sheet Type</h3>
+            <p id="r-sheet-type" style="margin:0;color:#6b7280;"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Summary</h2>
+        <div class="grid">
+          <div>
+            <h3 style="margin-bottom:2px;color:#1f9d55;" id="r-correct-count"></h3>
+            <p style="margin:0;color:#6b7280;">Correct</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#d33d3d;" id="r-wrong-count"></h3>
+            <p style="margin:0;color:#6b7280;">Wrong</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#6b7280;" id="r-blank-count"></h3>
+            <p style="margin:0;color:#6b7280;">Unanswered</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#d98c1f;" id="r-invalid-count"></h3>
+            <p style="margin:0;color:#6b7280;">Invalid</p>
+          </div>
+        </div>
+        <hr style="margin:20px 0;border:none;border-top:1px solid #e1e5ee;">
+        <h2 style="margin-bottom:0;">
+          Final Marks: <span id="r-final-marks" style="color:#2f5fdc;"></span> /
+          <span id="r-max-marks"></span>
+          <span style="font-size:1rem;color:#6b7280;font-weight:400;">(<span id="r-percentage"></span>%)</span>
+        </h2>
+        <button class="btn btn-secondary" id="print-btn" onclick="window.print()">Print This Result</button>
+      </div>
+
+      <div class="card">
+        <h2>Question-wise Result</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>Selected</th>
+              <th>Correct Answer</th>
+              <th>Status</th>
+              <th>Marks</th>
+            </tr>
+          </thead>
+          <tbody id="question-results-tbody"></tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h2>AI Performance Analysis <span class="ai-coming-soon" style="background:#eaf1ff;color:#2f5fdc;">Gemini</span></h2>
+        <div id="ai-analysis-empty">
+          <p style="color:#6b7280;">Get an AI-generated breakdown of this student's strong topics, weak topics, and personalized suggestions.</p>
+          <button type="button" class="btn btn-primary" id="generate-analysis-btn">Generate AI Performance Analysis</button>
+        </div>
+        <div id="ai-analysis-content" style="display:none;">
+          <div id="ai-analysis-strong" style="margin-bottom:14px;"></div>
+          <div id="ai-analysis-weak" style="margin-bottom:14px;"></div>
+          <div id="ai-analysis-suggestions"></div>
+          <button type="button" class="btn btn-secondary" id="regenerate-analysis-btn">Regenerate Analysis</button>
+        </div>
+        <div id="ai-analysis-alert" class="alert"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/result.js"></script>
+</body>
+</html>

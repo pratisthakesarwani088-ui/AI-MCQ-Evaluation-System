@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMR Evaluation - AI Assistant for MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">OMR Evaluation</h1>
+    <p class="page-subtitle">Upload the question paper, answer key, and a student's OMR sheet for fully offline, OpenCV-based bubble detection and scoring.</p>
+
+    <div id="no-exam-warning" class="card" style="display:none;">
+      <p>⚠️ No exam selected, or the selected exam isn't configured for OMR Evaluation. Please <a href="/create-exam">create an OMR-type exam</a> first.</p>
+    </div>
+
+    <!-- ============ STEP 1: Upload Question Paper ============ -->
+    <div class="card">
+      <div class="step">Step 1 (optional)</div>
+      <h2 style="margin-top:4px;">Upload Question Paper</h2>
+      <p style="color:#6b7280;">Keep a copy of the question paper attached to this exam for reference.</p>
+
+      <label for="omr_question_paper_file">Question Paper (PDF, DOCX, TXT, or a scanned image)</label>
+      <input type="file" id="omr_question_paper_file" accept=".pdf,.docx,.txt,.jpg,.jpeg,.png">
+      <small class="hint">Images are read using OCR. Question text found here is used later for AI Performance Analysis.</small>
+      <button type="button" class="btn btn-secondary" id="omr-upload-paper-btn">Upload Question Paper</button>
+      <div id="omr-paper-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ STEP 2: Upload Answer Key ============ -->
+    <div class="card">
+      <div class="step">Step 2</div>
+      <h2 style="margin-top:4px;">Upload Answer Key</h2>
+      <p style="color:#6b7280;">Upload a clear photo of the correct answer key. Text will be automatically extracted.</p>
+
+      <label for="omr_answer_key_file">Answer Key Image (JPG, JPEG, PNG)</label>
+      <input type="file" id="omr_answer_key_file" accept=".jpg,.jpeg,.png">
+      <img id="omr-key-preview" style="display:none; max-width:100%; margin-top:14px; border-radius:8px; border:1px solid #e1e5ee;">
+      <button type="button" class="btn btn-primary" id="omr-upload-key-btn">Upload &amp; Extract Answer Key</button>
+      <div id="omr-key-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ STEP 3: Verify Answer Key ============ -->
+    <div class="card">
+      <div class="step">Step 3</div>
+      <h2 style="margin-top:4px;">Verify Answer Key</h2>
+      <p style="color:#6b7280;">Review the extracted answers below. Correct any mistakes, then save.</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:25%;">Question No.</th>
+            <th>Correct Answer</th>
+          </tr>
+        </thead>
+        <tbody id="omr-answer-key-tbody">
+          <tr>
+            <td colspan="2" class="empty-state">Upload an answer key above to review it here.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button type="button" class="btn btn-success" id="omr-save-key-btn">Save Verified Answer Key</button>
+      <div id="omr-verify-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ STEP 4: Upload Student OMR Sheet ============ -->
+    <div class="card">
+      <div class="step">Step 4</div>
+      <h2 style="margin-top:4px;">Upload Student OMR Sheet</h2>
+
+      <div class="grid">
+        <div>
+          <label for="omr_student_name">Student Name <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+          <input type="text" id="omr_student_name" placeholder="e.g. Priya Sharma">
+        </div>
+        <div>
+          <label for="omr_roll_number">Roll Number <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+          <input type="text" id="omr_roll_number" placeholder="e.g. 21BCA045">
+        </div>
+      </div>
+
+      <label for="omr_student_sheet_file">Student OMR Sheet Image (JPG, JPEG, PNG)</label>
+      <input type="file" id="omr_student_sheet_file" accept=".jpg,.jpeg,.png">
+      <img id="omr-sheet-preview" style="display:none; max-width:100%; margin-top:14px; border-radius:8px; border:1px solid #e1e5ee;">
+      <button type="button" class="btn btn-primary" id="omr-upload-sheet-btn">Upload Student Sheet</button>
+      <div id="omr-sheet-alert" class="alert"></div>
+
+      <h3 style="margin-top:24px;">Uploaded Student Sheets</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Roll No.</th>
+            <th>Sheet Type</th>
+            <th>Uploaded</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="omr-sheets-tbody">
+          <tr>
+            <td colspan="5" class="empty-state">No student sheets uploaded yet for this exam.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============ STEP 5: Bubble Detection & Evaluation ============ -->
+    <div class="card">
+      <div class="step">Step 5</div>
+      <h2 style="margin-top:4px;">Evaluate Selected Sheet</h2>
+      <p style="color:#6b7280;">Bubble detection (with perspective/rotation correction) already ran automatically when the sheet was uploaded. Click below to score it against the verified answer key.</p>
+
+      <div class="grid">
+        <div>
+          <h3 style="margin-bottom:4px;">Sheet Type Detected</h3>
+          <span class="badge badge-blank" id="omr-sheet-type-badge">Not processed yet</span>
+        </div>
+        <div>
+          <h3 style="margin-bottom:4px;">Bubble Detection</h3>
+          <span class="badge badge-blank" id="omr-bubble-status-badge">Pending</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary" id="omr-run-evaluation-btn">Evaluate Selected Sheet</button>
+      <div id="omr-evaluate-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ Result Summary ============ -->
+    <div class="card">
+      <h2>Result Summary</h2>
+      <div class="grid">
+        <div>
+          <h3 style="margin-bottom:2px;color:#1f9d55;" id="omr-correct-count">—</h3>
+          <p style="margin:0;color:#6b7280;">Correct</p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;color:#d33d3d;" id="omr-wrong-count">—</h3>
+          <p style="margin:0;color:#6b7280;">Wrong</p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;color:#6b7280;" id="omr-blank-count">—</h3>
+          <p style="margin:0;color:#6b7280;">Unanswered</p>
+        </div>
+        <div>
+          <h3 style="margin-bottom:2px;color:#d98c1f;" id="omr-invalid-count">—</h3>
+          <p style="margin:0;color:#6b7280;">Invalid</p>
+        </div>
+      </div>
+      <hr style="margin:20px 0;border:none;border-top:1px solid #e1e5ee;">
+      <h2 style="margin-bottom:0;">
+        Final Marks: <span id="omr-final-marks" style="color:#2f5fdc;">—</span> /
+        <span id="omr-max-marks">—</span>
+      </h2>
+      <button type="button" class="btn btn-secondary" id="omr-view-result-btn" style="display:none;" onclick="window.location.href='/result'">View Full Result Page</button>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/omr_evaluation.js"></script>
+</body>
+</html>

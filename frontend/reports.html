@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - AI Assistant for MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">Reports</h1>
+    <p class="page-subtitle">Find an exam to see its statistics, generate a full Exam Report, or download individual Student Reports — all as PDF.</p>
+
+    <!-- ============ Find Exam ============ -->
+    <div class="card">
+      <h2>Find Exam</h2>
+
+      <div class="grid" style="grid-template-columns: 2fr 1fr 1fr;">
+        <div>
+          <label for="report-exam-search">Search by Exam Name</label>
+          <input type="text" id="report-exam-search" placeholder="e.g. Unit Test 1">
+        </div>
+        <div>
+          <label for="report-subject-filter">Subject</label>
+          <select id="report-subject-filter">
+            <option value="">All Subjects</option>
+          </select>
+        </div>
+        <div>
+          <label for="report-type-filter">Exam Type</label>
+          <select id="report-type-filter">
+            <option value="">All Types</option>
+            <option value="AI">AI-Based</option>
+            <option value="OMR">OMR</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="exams-loading" class="empty-state"><span class="spinner"></span> Loading exams...</div>
+      <table id="exams-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Exam Name</th>
+            <th>Subject</th>
+            <th>Type</th>
+            <th>Students Evaluated</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="exams-tbody"></tbody>
+      </table>
+      <div id="exams-empty" class="empty-state" style="display:none;">No exams match your search/filters.</div>
+      <div id="exams-error" class="alert alert-error"></div>
+    </div>
+
+    <!-- ============ Exam Report + Statistics ============ -->
+    <div class="card" id="exam-report-card" style="display:none;">
+      <h2>Exam Report: <span id="er-exam-name"></span></h2>
+
+      <div id="exam-report-loading" class="empty-state"><span class="spinner"></span> Loading exam report...</div>
+
+      <div id="exam-report-content" style="display:none;">
+        <div class="grid" style="margin-bottom:16px;">
+          <div>
+            <h3 style="margin-bottom:2px;">Subject</h3>
+            <p id="er-subject" style="margin:0;color:#6b7280;"></p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;">Exam Type</h3>
+            <p id="er-exam-type" style="margin:0;color:#6b7280;"></p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;">Students Evaluated</h3>
+            <p id="er-total-students" style="margin:0;color:#6b7280;"></p>
+          </div>
+        </div>
+
+        <h3>Statistics</h3>
+        <div class="grid">
+          <div>
+            <h3 style="margin-bottom:2px;color:#1f9d55;" id="stat-highest-marks">—</h3>
+            <p style="margin:0;color:#6b7280;">Highest Marks</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#d33d3d;" id="stat-lowest-marks">—</h3>
+            <p style="margin:0;color:#6b7280;">Lowest Marks</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#2f5fdc;" id="stat-average-marks">—</h3>
+            <p style="margin:0;color:#6b7280;">Average Marks</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#6b7280;" id="stat-total-students">—</h3>
+            <p style="margin:0;color:#6b7280;">Students Evaluated</p>
+          </div>
+        </div>
+        <div class="grid" style="margin-top:16px;">
+          <div>
+            <h3 style="margin-bottom:2px;color:#1f9d55;" id="stat-pass-count">—</h3>
+            <p style="margin:0;color:#6b7280;">Pass Count</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#d33d3d;" id="stat-fail-count">—</h3>
+            <p style="margin:0;color:#6b7280;">Fail Count</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#2f5fdc;" id="stat-pass-percentage">—</h3>
+            <p style="margin:0;color:#6b7280;">Pass %</p>
+          </div>
+          <div>
+            <h3 style="margin-bottom:2px;color:#2f5fdc;" id="stat-average-percentage">—</h3>
+            <p style="margin:0;color:#6b7280;">Average %</p>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-primary" id="download-exam-report-btn">Download Exam Report PDF</button>
+      </div>
+      <div id="exam-report-empty" class="empty-state" style="display:none;">No students have been evaluated for this exam yet, so an exam report isn't available.</div>
+      <div id="exam-report-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ Student Reports ============ -->
+    <div class="card" id="student-report-card" style="display:none;">
+      <h2>Student Reports</h2>
+      <p style="color:#6b7280;margin-top:-8px;">Download an individual PDF report for any evaluated student.</p>
+
+      <label for="student-report-search">Search by Name or Roll Number</label>
+      <input type="text" id="student-report-search" placeholder="e.g. Priya Sharma, 21BCA045">
+
+      <div id="students-loading" class="empty-state"><span class="spinner"></span> Loading students...</div>
+      <table id="students-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Roll Number</th>
+            <th>Final Marks</th>
+            <th>Percentage</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="students-tbody"></tbody>
+      </table>
+      <div id="students-empty" class="empty-state" style="display:none;">No evaluated students found.</div>
+      <div id="student-report-alert" class="alert"></div>
+    </div>
+
+    <!-- ============ Generated Reports ============ -->
+    <div class="card" id="generated-reports-card" style="display:none;">
+      <h2>Generated Reports</h2>
+
+      <div id="generated-reports-loading" class="empty-state" style="display:none;"><span class="spinner"></span> Loading...</div>
+      <table id="generated-reports-table" style="display:none;">
+        <thead>
+          <tr>
+            <th>Report Type</th>
+            <th>Generated</th>
+            <th style="width:140px;"></th>
+          </tr>
+        </thead>
+        <tbody id="generated-reports-tbody"></tbody>
+      </table>
+      <div id="generated-reports-empty" class="empty-state">No reports generated yet for this exam.</div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/reports.js"></script>
+</body>
+</html>

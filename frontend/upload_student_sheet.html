@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Student Sheet - MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">Step 4: Upload Student Sheet</h1>
+    <p class="page-subtitle">Upload one student's answer sheet (OMR bubble sheet or a normal handwritten MCQ sheet).</p>
+
+    <div id="no-exam-warning" class="card" style="display:none;">
+      <p>⚠️ No exam selected. Please <a href="/create-exam">create or select an exam</a> first.</p>
+    </div>
+
+    <div id="upload-card" class="card">
+      <h2>Student Sheet Details</h2>
+
+      <form id="upload-form">
+        <label for="student_name">Student Name <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+        <input type="text" id="student_name" name="student_name" placeholder="e.g. Priya Sharma">
+
+        <label for="roll_number">Roll Number <span style="font-weight:400;color:#6b7280;">(optional)</span></label>
+        <input type="text" id="roll_number" name="roll_number" placeholder="e.g. 21BCA045">
+
+        <label for="student_sheet_file">Answer Sheet Image (JPG, JPEG, PNG)</label>
+        <input type="file" id="student_sheet_file" name="file" accept=".jpg,.jpeg,.png" required>
+        <small class="hint">Works with OMR bubble sheets or normal sheets with ticks/circles/boxes/handwritten answers (e.g. "1-B").</small>
+
+        <img id="preview-image" style="display:none; max-width: 100%; margin-top: 14px; border-radius: 8px; border: 1px solid #e1e5ee;">
+
+        <button type="submit" class="btn btn-primary" id="upload-btn">Upload Student Sheet</button>
+      </form>
+
+      <div id="form-alert" class="alert"></div>
+    </div>
+
+    <div class="card">
+      <h2>Previously Uploaded Sheets (this exam)</h2>
+      <div id="sheets-list">
+        <p class="empty-state">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/upload_student_sheet.js"></script>
+</body>
+</html>

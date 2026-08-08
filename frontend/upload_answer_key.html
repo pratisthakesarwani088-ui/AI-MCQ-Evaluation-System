@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Answer Key - MCQ Evaluation System</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="brand">
+      AI Assistant for MCQ Evaluation System
+      <span class="tagline">Evaluate Smarter with AI</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/create-exam">Create Exam</a>
+      <a href="/ai-evaluation">AI-Based Evaluation</a>
+      <a href="/omr-evaluation">OMR Evaluation</a>
+      <a href="/previous-exams">Previous Exams</a>
+      <a href="/reports">Reports</a>
+      <a href="/ai-assistant">AI Assistant</a>
+    </nav>
+  </div>
+
+  <div class="container">
+    <h1 class="page-title">Step 2: Upload Answer Key</h1>
+    <p class="page-subtitle">Upload a clear photo of the correct answer key. Text will be automatically extracted.</p>
+
+    <div id="no-exam-warning" class="card" style="display:none;">
+      <p>⚠️ No exam selected. Please <a href="/create-exam">create or select an exam</a> first.</p>
+    </div>
+
+    <div id="upload-card" class="card">
+      <h2 id="exam-heading">Answer Key Image</h2>
+
+      <form id="upload-form">
+        <label for="answer_key_file">Answer Key Image (JPG, JPEG, PNG)</label>
+        <input type="file" id="answer_key_file" name="file" accept=".jpg,.jpeg,.png" required>
+        <small class="hint">Tip: use good lighting and a flat, non-blurry photo for best OCR accuracy.</small>
+
+        <img id="preview-image" style="display:none; max-width: 100%; margin-top: 14px; border-radius: 8px; border: 1px solid #e1e5ee;">
+
+        <button type="submit" class="btn btn-primary" id="upload-btn">Upload &amp; Extract Answer Key</button>
+      </form>
+
+      <div id="form-alert" class="alert"></div>
+    </div>
+  </div>
+
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/upload_answer_key.js"></script>
+</body>
+</html>
