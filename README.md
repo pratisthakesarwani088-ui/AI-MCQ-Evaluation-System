@@ -6,6 +6,13 @@ A locally-run web application that helps teachers create exams, generate or scan
 
 ---
 
+
+## 🚀 Project Demo
+🎥 Demo Video: https://youtu.be/EI2QaZjVtp8  
+💻 GitHub: https://github.com/pratisthakesarwani088-ui/AI-MCQ-Evaluation-System  
+
+
+____
 ## Table of Contents
 
 - [Project Description](#project-description)
