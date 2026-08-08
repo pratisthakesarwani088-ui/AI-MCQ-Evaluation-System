@@ -140,7 +140,7 @@ Gemini powers **AI-Based Evaluation** and the **AI Assistant** panel. **OMR Eval
 2. Add it to your `.env` file:
    ```
    GEMINI_API_KEY=your_gemini_api_key
-   GEMINI_MODEL=gemini-1.5-flash
+   GEMINI_MODEL=gemini-3.6-flash
    ```
 3. If this key is missing, AI-dependent features return a clear "AI Assistant is not configured" message instead of failing silently — the rest of the app is unaffected.
 
