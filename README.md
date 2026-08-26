@@ -8,7 +8,7 @@ A locally-run web application that helps teachers create exams, generate or scan
 
 
 ## 🚀 Project Demo
-🎥 Demo Video: https://youtu.be/EI2QaZjVtp8  
+🎥 Demo Video: https://www.linkedin.com/posts/pratisthaa-kesharwaniii-87260430a_python-fastapi-ai-activity-7491559299308011520-c6-3?utm_source=social_share_send&utm_medium=android_app&rcm=ACoAAE7Bh9YBKu90-pWQC9YXaTczbFda4_Imiw8&utm_campaign=copy_link
 💻 GitHub: https://github.com/pratisthakesarwani088-ui/AI-MCQ-Evaluation-System  
 
 
